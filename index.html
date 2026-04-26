@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message for You</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            /* Applying Lucida font stack */
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Floating Hearts Styles */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 20px;
+            user-select: none;
+            pointer-events: none;
+            animation: float Up 4s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10; /* Keep text above hearts */
+        }
+
+        h1 { color: #ff4d6d; }
+
+        p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 60px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background-color: #444;
+            color: white;
+            position: absolute;
+        }
+
+        .success-msg {
+            display: none;
+            color: #ff4d6d;
+            font-size: 1.6rem;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainBox">
+        <h1>To my favorite person...</h1>
+        <p>
+            You already call me your Riri, and honestly? Nobody else gets me like you do. 
+            You’re the only person who can keep up with my energy and look that good doing it. 
+            I’m obsessed with the way your eyes change—how they’re light brown one minute 
+            and deep dark brown the next—I could look at them forever. <br><br>
+            
+            But more than just the fun and the way you look at me, I want you to know that 
+            while you're my Rocky, <b>you don't always have to be the strong one around me.</b> 
+            You can just be you—vulnerable, tired, or totally silly—and I’ll always be right 
+            here to hold you down. You’re my best friend, my favorite view, and the only 
+            one I want to build an empire with.
+        </p>
+        
+        <h3>So, let's make it official... Will you be my Rocky?</h3>
+
+        <div class="btn-container">
+            <button id="yesBtn" onclick="celebrate()">YES!</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">NO</button>
+        </div>
+        <div id="success" class="success-msg">Yay! Can't wait to build our empire, Rocky! ❤️</div>
+    </div>
+
+    <script>
+        // Move the "No" button
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            btn.style.position = 'fixed';
+        }
+
+        // Success Action
+        function celebrate() {
+            document.querySelector('.btn-container').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('noBtn').style.display = 'none';
+            // Optional: Increase heart speed or count on click
+            for(let i=0; i<20; i++) { createHeart(); }
+        }
+
+        // Create Pink and Blue Hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️'; // Using standard heart emoji
+            
+            // Randomly choose Pink or Blue
+            const colors = ['#ff4d6d', '#00d4ff']; 
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's'; // 3-5 seconds
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px'; // 10-30px
+            
+            document.body.appendChild(heart);
+
+            // Remove heart after animation ends
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        // Keep generating hearts
+        setInterval(createHeart, 300);
+    </script>
+</body>
+  </html>
+  
