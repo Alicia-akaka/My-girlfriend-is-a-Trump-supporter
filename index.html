@@ -2,100 +2,115 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A Special Message for You</title>
     <style>
         body {
             background-color: #1a1a1a;
             color: #ffffff;
-            /* Applying Lucida font stack */
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             overflow: hidden;
             text-align: center;
             position: relative;
         }
 
-        /* Floating Hearts Styles */
+        /* CSS Heart Shape */
         .heart {
             position: absolute;
             bottom: -50px;
-            font-size: 20px;
-            user-select: none;
-            pointer-events: none;
-            animation: float Up 4s linear infinite;
+            width: 15px;
+            height: 15px;
+            animation: floatUp 4s linear infinite;
+            z-index: 1;
         }
 
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .heart::before { left: 7.5px; }
+        .heart::after { left: 0; transform: rotate(-90deg); transform-origin: 100% 100%; }
+
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(45deg); opacity: 0; }
         }
 
         .container {
-            max-width: 600px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
+            width: 90%;
+            max-width: 450px; /* Slimmer for better fit */
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 10; /* Keep text above hearts */
+            z-index: 10;
+            box-sizing: border-box;
         }
 
-        h1 { color: #ff4d6d; }
-
-        p {
-            line-height: 1.8;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+        h1 { color: #ff4d6d; font-size: 1.4rem; margin-top: 0; }
+        
+        p { 
+            line-height: 1.5; 
+            font-size: 0.95rem; /* Smaller font to prevent scrolling */
+            margin-bottom: 20px; 
         }
+
+        h3 { font-size: 1.1rem; color: #00d4ff; }
 
         .btn-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             position: relative;
-            height: 60px;
+            height: 50px;
+            margin-top: 10px;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 1.1rem;
+            padding: 10px 25px;
+            font-size: 1rem;
             font-weight: bold;
             border: none;
-            border-radius: 30px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.2s;
+            z-index: 20;
         }
 
-        #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        
+        #noBtn { 
+            background-color: #444; 
+            color: white; 
+            position: absolute; 
+            transition: all 0.1s ease; 
+            touch-action: none; /* Prevents scrolling when trying to click */
         }
 
-        #noBtn {
-            background-color: #444;
-            color: white;
-            position: absolute;
-        }
-
-        .success-msg {
-            display: none;
-            color: #ff4d6d;
-            font-size: 1.6rem;
-            margin-top: 20px;
-            font-weight: bold;
+        .success-msg { 
+            display: none; 
+            color: #ff4d6d; 
+            font-size: 1.3rem; 
+            margin-top: 20px; 
+            font-weight: bold; 
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainBox">
+    <div class="container">
         <h1>To my favorite person...</h1>
         <p>
             You already call me your Riri, and honestly? Nobody else gets me like you do. 
@@ -110,61 +125,48 @@
             one I want to build an empire with.
         </p>
         
-        <h3>So, let's make it official... Will you be my Rocky?</h3>
+        <h3>Will you be my Rocky?</h3>
 
         <div class="btn-container">
             <button id="yesBtn" onclick="celebrate()">YES!</button>
-            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">NO</button>
+            <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">NO</button>
         </div>
         <div id="success" class="success-msg">Yay! Can't wait to build our empire, Rocky! ❤️</div>
     </div>
 
     <script>
-        // Move the "No" button
         function moveButton() {
             const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            
+            // Keeps button within visible screen area
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 20);
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
             btn.style.position = 'fixed';
         }
 
-        // Success Action
         function celebrate() {
             document.querySelector('.btn-container').style.display = 'none';
+            document.querySelector('p').style.display = 'none';
+            document.querySelector('h1').style.display = 'none';
+            document.querySelector('h3').style.display = 'none';
             document.getElementById('success').style.display = 'block';
-            document.getElementById('noBtn').style.display = 'none';
-            // Optional: Increase heart speed or count on click
-            for(let i=0; i<20; i++) { createHeart(); }
+            for(let i=0; i<50; i++) { setTimeout(createHeart, i * 50); }
         }
 
-        // Create Pink and Blue Hearts
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerHTML = '❤️'; // Using standard heart emoji
-            
-            // Randomly choose Pink or Blue
             const colors = ['#ff4d6d', '#00d4ff']; 
             heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-            
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's'; // 3-5 seconds
-            heart.style.fontSize = (Math.random() * 20 + 10) + 'px'; // 10-30px
-            
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            heart.style.transform = `scale(${Math.random() * 0.8 + 0.5})`;
             document.body.appendChild(heart);
-
-            // Remove heart after animation ends
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
+            setTimeout(() => { heart.remove(); }, 4000);
         }
 
-        // Keep generating hearts
-        setInterval(createHeart, 300);
+        setInterval(createHeart, 400);
     </script>
 </body>
-  </html>
-  
+</html>
